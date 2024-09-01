@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="tabs">
+        <button class="tab-button" onclick="openTab('bmi')">BMI</button>
+        <button class="tab-button" onclick="openTab('compare')">Compare</button>
+        <button class="tab-button" onclick="openTab('about')">About Us</button>
+    </div>
+    <div id="bmi" class="tab-content">
+        <h2>BMI Calculator</h2>
+        <label for="height">Body Height in cms:</label>
+        <input type="number" id="height" min="0" required>
+        <br>
+        <label for="weight">Body Weight in kgs:</label>
+        <input type="number" id="weight" min="0" required>
+        <br>
+        <button onclick="calculateBMI()">Calculate</button>
+        <p id="bmi-result"></p>
+    </div>
+    <div id="compare" class="tab-content" style="display:none;">
+        <h2>Compare Health Data</h2>
+        <div id="chart-container">
+            <!-- Chart will be displayed here -->
+        </div>
+    </div>
+    <div id="about" class="tab-content" style="display:none;">
+        <h2>About Us</h2>
+        <p>This website provides tools for health measurement and comparison. Learn more about health indicators and how they affect you.</p>
+    </div>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>
