@@ -57,12 +57,46 @@
             display: block;
         }
 
+        /* Profile-tab */
+        .profile-input {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-input label {
+            width: 100px;
+        }
+
+        .profile-input input {
+            width: 200px;
+            padding: 5px;
+            margin-left: 10px;
+        }
+
+        .profile-input button {
+            margin-left: 10px;
+            padding: 5px 10px;
+        }
+
+        button {
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #4682B4;
+        }
         .bmi-input {
             margin-bottom: 10px;
         }
 
         #dashboard {
-            width: 100%;
+            width: 80%;
             margin: auto;
             background-color: rgba(255, 255, 255, 0.2); /* Make it more transparent */
             padding: 20px;
@@ -86,10 +120,36 @@
 
     <!-- Navigation Tabs -->
     <div class="tabs">
-        <button onclick="openTab(event, 'bmi')">BMI</button>
-        <button onclick="openTab(event, 'compare')">Compare</button>
-        <button onclick="openTab(event, 'about')">About Us</button>
+        <button class="tablinks" onclick="openTab(event, 'profile')">Profile</button>
+        <button class="tablinks" onclick="openTab(event, 'bmi')">BMI</button>
+        <button class="tablinks" onclick="openTab(event, 'compare')">Compare</button>
+        <button class="tablinks" onclick="openTab(event, 'about')">About Us</button>
     </div>
+
+    <!-- Profile Tab Content -->
+    <div id="profile" class="tab-content">
+        <h2>User Profile</h2>
+        <div class="profile-input">
+            <label for="name">Name: </label>
+            <input type="text" id="name" placeholder="Enter your name">
+        </div>
+        <div class="profile-input">
+            <label for="age">Age: </label>
+            <input type="number" id="age" placeholder="Enter your age">
+        </div>
+        <div class="profile-input">
+            <label for="country">Country: </label>
+            <input type="text" id="country" placeholder="Enter your country">
+        </div>
+        <div class="profile-input">
+            <label for="profile_bmi">BMI: </label>
+            <input type="number" id="profile_bmi" placeholder="Enter your BMI">
+            <button onclick="goToBMICalculator()">Calculate</button> <!-- Button to open BMI tab -->
+        </div>
+        <button onclick="saveProfile()">Save Profile</button> <!-- Save Button -->
+        <p id="profileStatus"></p> <!-- Status message -->
+    </div>
+
 
     <!-- BMI Tab Content -->
     <div id="bmi" class="tab-content">
@@ -105,6 +165,7 @@
         <button onclick="calculateBMI()">Calculate</button>
         <p id="bmiResult"></p>
     </div>
+
 
     <!-- Compare Tab Content -->
     <div id="compare" class="tab-content">
@@ -140,6 +201,29 @@
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
         }
+
+        function saveProfile() {
+            const name = document.getElementById("name").value;
+            const age = document.getElementById("age").value;
+            const country = document.getElementById("country").value;
+            const bmi = document.getElementById("profile_bmi").value;
+
+            // Check if fields are filled
+            if (name && age && country && bmi) {
+                // Save data (here we use localStorage for simplicity)
+                localStorage.setItem("profile", JSON.stringify({ name, age, country, bmi }));
+                document.getElementById("profileStatus").innerText = "Profile saved successfully!";
+            } else {
+                document.getElementById("profileStatus").innerText = "Please fill in all fields.";
+            }
+        }
+
+
+        function goToBMICalculator() {
+            // Simulate clicking on the BMI tab
+            document.querySelector(".tabs button[onclick=\"openTab(event, 'bmi')\"]").click();
+        }
+    
 
         function calculateBMI() {
             var height = document.getElementById("height").value;
@@ -204,6 +288,7 @@
 
         document.getElementsByClassName('tabs')[0].children[0].click();
         document.getElementById('compare').addEventListener('click', fetchBMIData);
+        window.onload = fetchBMIData;
     </script>
 
 </body>
