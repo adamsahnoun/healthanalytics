@@ -114,6 +114,41 @@
             margin-top: 20px;
             color: #FFF; /* Keep the text white */
         }
+
+        /* Login Tab Styling */
+        .login-container {
+            max-width: 300px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .login-container input[type="text"], .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .login-container button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .login-container button:hover {
+            background-color: #45a049;
+        }
+
+        /* Google Login Button */
+        .g-signin2 {
+            margin-top: 10px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -124,6 +159,7 @@
         <button class="tablinks" onclick="openTab(event, 'bmi')">BMI</button>
         <button class="tablinks" onclick="openTab(event, 'compare')">Compare</button>
         <button class="tablinks" onclick="openTab(event, 'about')">About Us</button>
+        <button class="tablinks" onclick="openTab(event, 'login')">Login</button> <!-- New Login Tab -->
     </div>
 
     <!-- Profile Tab Content -->
@@ -146,8 +182,8 @@
             <input type="number" id="profile_bmi" placeholder="Enter your BMI">
             <button onclick="goToBMICalculator()">Calculate</button> <!-- Button to open BMI tab -->
         </div>
-        <button onclick="saveProfile()">Save Profile</button> <!-- Save Button -->
-        <p id="profileStatus"></p> <!-- Status message -->
+        <button onclick="saveProfile()">Save Profile</button>
+        <p id="profileStatus"></p>
     </div>
 
 
@@ -182,7 +218,26 @@
         <p>Welcome to the Health Tracker website. We are dedicated to helping you monitor your health.</p>
     </div>
 
+    <!-- Login Tab Content -->
+    <div id="login" class="tab-content">
+        <h2>Login</h2>
+        <div class="login-container">
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+            <button type="submit">Login</button>
+
+            <!-- Google Sign-In Button -->
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        </div>
+        <button onclick="signOut()">Sign out</button>
+    </div>
+
     <!-- JavaScript for Tab Switching and BMI Calculation -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         function openTab(evt, tabName) {
@@ -218,12 +273,10 @@
             }
         }
 
-
         function goToBMICalculator() {
             // Simulate clicking on the BMI tab
             document.querySelector(".tabs button[onclick=\"openTab(event, 'bmi')\"]").click();
         }
-    
 
         function calculateBMI() {
             var height = document.getElementById("height").value;
@@ -283,6 +336,23 @@
                         }
                     }
                 }
+            });
+        }
+
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+            alert('Google User Signed in: ' + profile.getName());
+        }
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+                alert('User signed out');
             });
         }
 
